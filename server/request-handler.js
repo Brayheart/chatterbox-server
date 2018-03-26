@@ -30,37 +30,27 @@ module.exports.requestHandler = function(request, response) {
 
   if (request.url !== '/classes/messages') {
     var statusCode = 404;
-
     response.writeHead(statusCode, defaultCorsHeaders);
     response.end();
   }
 
   if (request.method === 'GET') {
     var statusCode = 200;
-
     response.writeHead(statusCode, defaultCorsHeaders);
-
     response.end(JSON.stringify({results: results}));
 
   } else if (request.method === 'POST' || request.method === 'OPTIONS') {
-
     var statusCode = 201;
-
     response.writeHead(statusCode, defaultCorsHeaders);
-
-
     var requestBody = '';
-
     request.on('data', function(chunk) {
       requestBody += chunk;
     });
-
     request.on('end', function() {
-      console.log('RB', requestBody)
+      console.log('RB', requestBody);
       results.unshift(JSON.parse(requestBody));
     });
-
-    response.end(JSON.stringify({results}));
+    response.end(JSON.stringify(results[0]));
   }
   
 };

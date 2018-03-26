@@ -18,7 +18,6 @@ describe('Node Server Request Listener Function', function() {
     var res = new stubs.response();
 
     handler.requestHandler(req, res);
-    console.log('here I am!')
     expect(res._responseCode).to.equal(200);
     expect(res._ended).to.equal(true);
   });
@@ -71,7 +70,7 @@ describe('Node Server Request Listener Function', function() {
 
     // Testing for a newline isn't a valid test
     // TODO: Replace with with a valid test
-    expect(res._data).to.equal(JSON.stringify('stubMsg'));
+    expect(res._data).to.equal(JSON.stringify(stubMsg));
     expect(res._ended).to.equal(true);
   });
 
