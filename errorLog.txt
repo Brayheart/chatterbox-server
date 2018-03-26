@@ -4,4 +4,5 @@ solved putting: var handleRequest = require('./request-handler.js') in basic-ser
 TypeError: "listener" argument must be a function
 exported request handler 
 
-
+SyntaxError: Unexpected end of JSON input
+module.exports.requestHandler = function(request, response) {

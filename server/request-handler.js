@@ -12,10 +12,7 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
 
-var results = [{
-  username: 'Jono',
-  text: 'Do my bidding!'
-}];
+var results = [];
 
 
 var defaultCorsHeaders = {
@@ -27,7 +24,7 @@ var defaultCorsHeaders = {
 };
 
 
-var requestHandler = function(request, response) {
+module.exports.requestHandler = function(request, response) {
 
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
@@ -43,9 +40,9 @@ var requestHandler = function(request, response) {
 
     response.writeHead(statusCode, defaultCorsHeaders);
 
-    response.end(JSON.stringify({results}));
+    response.end(JSON.stringify({results: results}));
 
-  } else if (request.method === 'POST') {
+  } else if (request.method === 'POST' || request.method === 'OPTIONS') {
 
     var statusCode = 201;
 
@@ -54,11 +51,12 @@ var requestHandler = function(request, response) {
 
     var requestBody = '';
 
-    request.on('data', function(data) {
-      requestBody += data;
+    request.on('data', function(chunk) {
+      requestBody += chunk;
     });
 
     request.on('end', function() {
+      console.log('RB', requestBody)
       results.unshift(JSON.parse(requestBody));
     });
 
@@ -67,7 +65,7 @@ var requestHandler = function(request, response) {
   
 };
 
-module.exports = requestHandler;
+
 
 
 
