@@ -10,3 +10,6 @@ module.exports.requestHandler = function(request, response) {
     
 SyntaxError: Unexpected end of JSON input
 removed request.on in request-handler. Refractored how babble info was passed through. 
+
+chatterbox: Failed to send message 
+added response.end(JSON.stringify(requestBody)); at end of request handler

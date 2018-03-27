@@ -13,6 +13,7 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 var results = [];
+var id = 0;
 
 
 var defaultCorsHeaders = {
@@ -28,7 +29,7 @@ module.exports.requestHandler = function(request, response) {
 
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
-  if (request.url !== '/classes/messages') {
+  if (!request.url.includes('/classes/messages')) {
     var statusCode = 404;
     response.writeHead(statusCode, defaultCorsHeaders);
     response.end();
@@ -37,6 +38,7 @@ module.exports.requestHandler = function(request, response) {
   if (request.method === 'GET') {
     var statusCode = 200;
     response.writeHead(statusCode, defaultCorsHeaders);
+
     response.end(JSON.stringify({results: results}));
 
   } else if (request.method === 'POST' || request.method === 'OPTIONS') {
@@ -45,18 +47,28 @@ module.exports.requestHandler = function(request, response) {
 
     var requestBody = '';
 
-    request.on('data', function(chunk) {//is not taking place
-      console.log('data =', chunk)
+    request.on('data', function(chunk) {
       requestBody = requestBody + chunk;
-      console.log('requestBody', JSON.parse(requestBody))
-      results.push(JSON.parse(requestBody));
-      // console.log(results);
-      response.end(JSON.stringify(requestBody));
+      
+
+      requestBody = JSON.parse(requestBody);
+      requestBody.updatedAt = new Date();
+      requestBody.createdAt = new Date();
+      requestBody.objectId = id++;
+
+console.log(requestBody)
+
+      results.push(requestBody)
+
+        results.sort(function(a, b) {
+          return a.createdAt > b.createdAt ? -1 : 1;
+        });
+
     });
 
-    response.end();
+    response.end(JSON.stringify(requestBody));
   }
-  
+
 };
 
 
