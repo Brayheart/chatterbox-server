@@ -42,15 +42,19 @@ module.exports.requestHandler = function(request, response) {
   } else if (request.method === 'POST' || request.method === 'OPTIONS') {
     var statusCode = 201;
     response.writeHead(statusCode, defaultCorsHeaders);
+
     var requestBody = '';
-    request.on('data', function(chunk) {
-      requestBody += chunk;
+
+    request.on('data', function(chunk) {//is not taking place
+      console.log('data =', chunk)
+      requestBody = requestBody + chunk;
+      console.log('requestBody', JSON.parse(requestBody))
+      results.push(JSON.parse(requestBody));
+      // console.log(results);
+      response.end(JSON.stringify(requestBody));
     });
-    request.on('end', function() {
-      console.log('RB', requestBody);
-      results.unshift(JSON.parse(requestBody));
-    });
-    response.end(JSON.stringify(results[0]));
+
+    response.end();
   }
   
 };

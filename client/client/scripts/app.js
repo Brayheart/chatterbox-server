@@ -37,14 +37,16 @@ var app = {
 
   send: function(message) {
     // app.startSpinner();
-
+console.log('here', message)
     // POST the message to the server
     $.ajax({
       url: app.server,
       type: 'POST',
       data: JSON.stringify(message),
+      dataType: 'json',
       contentType: 'application/json',
       success: function (data) {
+        console.log('here', data)
         // Clear messages input
         app.$message.val('');
 
@@ -56,6 +58,7 @@ var app = {
       }
     });
   },
+
 
   fetch: function(animate) {
     $.ajax({
